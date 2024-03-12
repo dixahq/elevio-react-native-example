@@ -42,7 +42,7 @@ function elevioJS(user) {
 			if (window.ReactNativeWebView?.postMessage) {
 				window.ReactNativeWebView.postMessage(message, '*');
 			} else {
-				// console.log('unable to find postMessage');
+				console.log('unable to find postMessage');
 			}
     }
     
@@ -131,7 +131,6 @@ const Elevio = forwardRef((props, ref) => {
   }, []);
 
   const receiveMessage = useCallback((event) => {
-    console.log("receiveMessage>>>>>>>>>>>>>");
     try {
       const msg = JSON.parse(event.nativeEvent.data);
       if (msg.hasOwnProperty("prefix") && msg.prefix === MESSAGE_PREFIX) {
