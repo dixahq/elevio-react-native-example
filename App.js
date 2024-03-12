@@ -1,70 +1,47 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useRef } from "react";
+import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
+import Elevio from "./Elevio";
 
-import React, { Component } from "react";
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TouchableHighlight
-} from "react-native";
-import * as Elevio from "./Elevio";
+const ElevioAccountId = "58f572246b738";
+const ElevioUser = {
+  email: "test@elev.io",
+};
 
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android:
-    "Double tap R on your keyboard to reload,\n" +
-    "Shake or press menu button for dev menu"
-});
+export default function App() {
+  const elevioRef = useRef();
+  useEffect(() => {
+    elevioRef.current.initialize(ElevioAccountId, ElevioUser);
+  }, []);
 
-type Props = {};
-export default class App extends Component<Props> {
-  componentDidMount() {
-    Elevio.initialize("58f572246b738", { email: "test@elev.io" });
-  }
+  return (
+    <View style={styles.container}>
+      <Elevio ref={elevioRef} />
+      <Text>Open up App.js to start working on your app!</Text>
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Elevio.Widget />
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-        <TouchableHighlight
-          style={{ zIndex: 2 }}
-          onPress={() => {
-            Elevio.show("page");
-          }}
-        >
-          <Text>Elevio</Text>
-        </TouchableHighlight>
-      </View>
-    );
-  }
+      <TouchableHighlight
+        style={styles.elevioButton}
+        onPress={() => {
+          elevioRef.current.show("page");
+        }}
+      >
+        <Text>Elevio</Text>
+      </TouchableHighlight>
+      <StatusBar style="auto" />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: "#fff",
     alignItems: "center",
-    backgroundColor: "#F5FCFF"
+    justifyContent: "center",
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10
+  elevioButton: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: "lightblue",
   },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    marginBottom: 5
-  }
 });
