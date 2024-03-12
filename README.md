@@ -1,18 +1,16 @@
 # Integrating Elevio with a React Native Mobile App
 
-This is an example of how to embed the Elevio assistant inside a React Native application.
+This is an example of how to embed the Elevio assistant inside a React Native application using the Expo framework.
 
 ### Setup and running
 
-1. Clone this repo. It has a running example of getting Elevio embedded inside React Native
+1. Clone this repo. It has a running example of getting Elevio embedded inside React Native with Expo
 2. Run `npm i` to install the required modules
-3. To start setting up React Native, go to their [Getting Started Guide](https://facebook.github.io/react-native/docs/getting-started)
-4. In the guide, select the **Building projects with native code** tab. In this section, select either "Android" or "IOS". Then follow the instructions in ["Installing dependencies"](https://facebook.github.io/react-native/docs/getting-started#installing-dependencies)
+3. This repo uses Expo to make getting started with React Native easier, to see more visit [Expo](https://expo.dev/)
 
 ### Running the App
 
-1. Follow the ["Running your React Native application"](https://facebook.github.io/react-native/docs/getting-started) section and see the application appear (either in your simulator or device, depending on the options selected in ["Installing dependencies"](https://facebook.github.io/react-native/docs/getting-started#installing-dependencies)).
-2. To open Elevio, press on the Elevio word.
+In the terminal, run `npm start` to start the Expo server. This will open a new tab in your browser with the Expo DevTools. From here you can run the app in a simulator or on your device.
 
 ## Code explanation
 
@@ -22,28 +20,21 @@ To explain what it is happening and how you might modify this to suit your own n
 
 Setting up your company and user settings is required so that Elevio Assistant knows which data to use and so it can manage [Smart groups](https://app.elev.io/segmentation).
 
-1. Open up **App.js**. You'll see that we import named **Elevio** that imports everything from **Elevio.js**
-2. Add your [company ID](https://app.elev.io/installation) and [user settings](https://api-docs.elevio.help/en/articles/4) in the `componentDidMount` method, where there is a call to `Elevio.initialize`
+Open up **App.js**. You'll see a couple of constants `ElevioAccountId` and `ElevioUser`. Replace these with your own company ID and user settings.
+When rendering the `Elevio` component we keep a ref to it, this ref gives us access to the imperative API that we can use to control the Assistant from the outside.
+The `Initialize` method is called when the component mounts and initializes the Assistant. This is so that it is ready to show when triggered.
 
-The `Elevio.initialize` method `initializes` the **Elevio** Assistant and renders it into a hidden view so that the Assistant is ready to show when triggered.
-
-In the `render` method you'll see the `Elevio.Widget` component. This puts the WebView that renders Elevio in the component hierarchy.
+To open Elevio when the app is running, press on the Elevio word.
 
 ### The Elevio.js File
 
 So now over to where it all happens: the **Elevio.js** file.
 
-#### Exported Functions
+#### How the Elevio Component Works
 
-In the **Elevio.js** file you'll see a bunch of exported functions and a React component class. The exported functions are used to 'control' Elevio from the outside. This is so you can do things like call `Elevio.show()` to have Elevio appear. To get this to update the React component we use an Event Emitter. This gives you an imperative API that you can can use anywhere.
+The Elevio component is where all the magic happens. Basically it's just a WebView that stays loaded, and _moves_ on and off the screen depending on if the Assistant is currently shown.
 
-#### How the Widget Component Works
-
-The main Widget component is where all the magic happens. Basically it's just a WebView that stays loaded, and _moves_ on and off the screen depending on if the Assistant is currently shown.
-
-The communication between the web content that the WebView renders is all handled via messages. If you're interested in the approach taken, check out [this article](https://medium.com/react-native-training/improving-communication-between-react-native-webviews-and-the-webpages-they-render-792c8f7db3e5) for further reading.
-
-> N.B: Due to a bug in the WebView provided natively by React Native we have installed https://github.com/react-native-community/react-native-webview.
+The communication between the web content that the WebView renders is all handled via messages. If you're interested in the approach taken, check out [this guide](https://github.com/react-native-webview/react-native-webview/blob/master/docs/Guide.md#communicating-between-js-and-native) for further reading.
 
 The process for getting Elevio up and running on that WebView is the same as for any website. The snippet that loads Elevio is embedded in the body of the html rendered. Then we inject some JavaScript to enabled the communication between the Elevio Assistant and React Native environment. This all happens in the function `elevioJS`; it adds some Event listeners to the "message" event and creates a function to send a message to the outer component.
 
@@ -55,7 +46,7 @@ The Elevio React Native component receives messages from the html elevio using t
 
 For the React Native app, the Elevio Assistant's standard CSS has been modified such that the appear/leave animations are turned off and the Assistant takes up the full width of the screen; you can see the CSS used in the React Native app inside the variable `ELEVIO_CSS`.
 
-The resulting appearance of the Assistant for the React Native app on open/close is in the style prop of the `SafeAreaView` `top: this.state.isShown ? 0 : "100%"`. You could change this to appear and disappear in anyway that suits your UI, and maybe animate it with a transition.
+The resulting appearance of the Assistant for the React Native app on open/close is in the style prop of the `SafeAreaView`, if shown the top is set to 0, if not it's set to 100%. You could change this to appear and disappear in anyway that suits your UI, and maybe animate it with a transition.
 
 > N.B. A Note from the Developer: I chose not to use the Modal component because the contents of the modal are removed from the render hierarchy when the modal is hidden. The consequence of this is that Elevio has to reload each time the modal is shown. This doesn't take too long because the JavaScript files have been cached but there is still a second or so of a blank screen.
 

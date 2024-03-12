@@ -3,10 +3,15 @@ import { useEffect, useRef } from "react";
 import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 import Elevio from "./Elevio";
 
+const ElevioAccountId = "58f572246b738";
+const ElevioUser = {
+  email: "test@elev.io",
+};
+
 export default function App() {
   const elevioRef = useRef();
   useEffect(() => {
-    elevioRef.current.initialize("58f572246b738", { email: "test@elev.io" });
+    elevioRef.current.initialize(ElevioAccountId, ElevioUser);
   }, []);
 
   return (

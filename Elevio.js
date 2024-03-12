@@ -165,8 +165,6 @@ const Elevio = forwardRef((props, ref) => {
           return true;
         }}
         onMessage={receiveMessage}
-        // injectedJavaScript={elevioJS(elevioState.user)}
-        // injectJavaScript={elevioJS(elevioState.user)}
         source={{
           html: `
             <html>
