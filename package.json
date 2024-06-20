@@ -20,6 +20,8 @@
   },
   "private": true,
   "overrides": {
-    "semver": "7.6.0"
+    "semver": "7.6.0",
+    "ws": "8.17.1",
+    "braces": "3.0.3"
   }
 }
